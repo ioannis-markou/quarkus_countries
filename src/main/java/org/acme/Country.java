@@ -2,20 +2,27 @@ package org.acme;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name="countries")
 public class Country{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @Column(name="country_code")
     private String countryCode;
+    @Column(name="official_name")
     private String officialName;
+    @Column(name="common_name")
     private String commonName;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="country_currency", joinColumns = @JoinColumn(name = "country_id") , inverseJoinColumns = @JoinColumn(name = "currency_id"))
+    private Set<Currency> currenciesSet= new HashSet<>() ;
 
     public Country() {
         //No-arg constructor for JPA entity.
-
     }
 
     public int getId() {
@@ -50,5 +57,11 @@ public class Country{
         this.commonName = commonName;
     }
 
+    public Set<Currency> getCurrencies() {
+        return currenciesSet;
+    }
 
+    public void setCurrencies(Set<Currency> currencies) {
+        this.currenciesSet = currencies;
+    }
 }

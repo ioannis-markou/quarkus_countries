@@ -1,15 +1,15 @@
 CREATE TABLE countries (
                         id SERIAL PRIMARY KEY,
-                        countryCode TEXT NOT NULL,
-                        commonName TEXT NOT NULL,
-                        officialName TEXT NOT NULL
+                        country_code TEXT NOT NULL,
+                        common_name TEXT NOT NULL,
+                        official_name TEXT NOT NULL
 );
 
 CREATE TABLE currencies (
                         id SERIAL PRIMARY KEY ,
                         name TEXT NOT NULL,
                         symbol TEXT NOT NULL,
-                        currencyCode TEXT
+                        currency_code TEXT
 );
 
 CREATE TABLE country_currency(

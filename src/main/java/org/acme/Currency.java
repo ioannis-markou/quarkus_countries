@@ -2,6 +2,8 @@ package org.acme;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name="currencies")
 public class Currency {
@@ -11,7 +13,10 @@ public class Currency {
 
     private String name;
     private String symbol;
+    @Column(name="currency_code")
     private String currencyCode;
+    @ManyToMany(mappedBy = "currenciesSet",fetch = FetchType.EAGER)
+    private Set<Country> countries ;
 
     public Currency() {
         //No-arg constructor for JPA entity.
@@ -49,5 +54,11 @@ public class Currency {
         this.id = id;
     }
 
+    public Set<Country> getCountries() {
+        return countries;
+    }
 
+    public void setCountries(Set<Country> countries) {
+        this.countries = countries;
+    }
 }
