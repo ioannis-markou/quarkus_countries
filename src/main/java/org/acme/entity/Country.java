@@ -1,13 +1,16 @@
-package org.acme;
+package org.acme.entity;
 
 import jakarta.persistence.*;
+import org.acme.Output;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name="countries")
-public class Country{
+public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -63,5 +66,13 @@ public class Country{
 
     public void setCurrencies(Set<Currency> currencies) {
         this.currenciesSet = currencies;
+    }
+
+    public Output toOutput() {
+        List<String> currencies = new ArrayList<>();
+        for(Currency currency : this.getCurrencies()) {
+            currencies.add(currency.getCurrencyCode());
+        }
+        return new Output(this.getCommonName(), this.getCountryCode(), this.getOfficialName(),currencies);
     }
 }

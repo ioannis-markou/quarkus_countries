@@ -1,7 +1,10 @@
-package org.acme;
+package org.acme.entity;
 
 import jakarta.persistence.*;
+import org.acme.Output;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -60,5 +63,14 @@ public class Currency {
 
     public void setCountries(Set<Country> countries) {
         this.countries = countries;
+    }
+
+    public List<Output> toOutputList() {
+        List<Output> outputs = new ArrayList<>();
+
+        for(Country country : this.getCountries()) {
+            outputs.add(country.toOutput());
+        }
+        return outputs;
     }
 }

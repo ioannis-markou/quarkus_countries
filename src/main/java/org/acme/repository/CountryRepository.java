@@ -2,12 +2,13 @@ package org.acme.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.acme.Country;
+import org.acme.entity.Country;
 
 @ApplicationScoped
 public class CountryRepository implements PanacheRepository<Country> {
 
-    public Country findByCode(String code) {
+    public Country getCountry(String code) {
         return find("countryCode", code).firstResult();
     }
+
 }

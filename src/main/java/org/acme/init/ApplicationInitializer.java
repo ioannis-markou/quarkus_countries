@@ -2,8 +2,11 @@ package org.acme.init;
 
 import io.quarkus.runtime.Startup;
 import jakarta.transaction.Transactional;
+import org.acme.entity.Currency;
 import org.acme.service.CountryService;
 import org.acme.service.CurrencyService;
+
+import java.util.Map;
 
 @Startup
 public class ApplicationInitializer {
@@ -19,7 +22,7 @@ public class ApplicationInitializer {
     @Transactional
     @Startup
     void populateCountriesTable() {
-        countryService.initCountries();
-        currencyService.initCurrencies();
+        Map<String, Currency> currencies = currencyService.initCurrencies();
+        countryService.initCountries(currencies);
     }
 }
