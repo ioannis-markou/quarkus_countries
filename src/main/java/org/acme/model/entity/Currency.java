@@ -65,6 +65,7 @@ public class Currency {
         this.countries = countries;
     }
 
+    //Migrate to mapstruct
     public List<CountryDto> toOutputList() {
         List<CountryDto> countryDtos = new ArrayList<>();
 

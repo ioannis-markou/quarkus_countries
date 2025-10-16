@@ -18,6 +18,7 @@ public class CurrencyService {
         this.currencyRepository = currencyRepository;
     }
 
+    //This mapping can be done with mapstruct
     public Currency currencyDTOToCurrencyEntity(Map.Entry<String, CurrencyFromRest> entry) {
         Currency curr= new Currency();
         curr.setName(entry.getValue().getName());
@@ -28,12 +29,12 @@ public class CurrencyService {
     }
 
     public Map<String, Currency> initCurrencies(List<CountryFromRest> countries) {
-        Currency curr;
         Map<String, Currency> currencies = new HashMap<>();
         for(CountryFromRest countryFromRest : countries) {
             for(Map.Entry<String, CurrencyFromRest> entry: countryFromRest.getCurrencies().entrySet()){
-                curr = currencyDTOToCurrencyEntity(entry);
-                if(getCurrencyEntity(curr.getCurrencyCode()) == null) {
+                var curr = getCurrencyEntity(entry.getKey());
+                if(curr == null) {
+                    curr = currencyDTOToCurrencyEntity(entry);
                     currencyRepository.persist(curr);
                     currencies.put(entry.getKey(), curr);
                 }

@@ -26,15 +26,17 @@ public class CountryService {
     }
 
     public Country countryDTOToCountry(CountryFromRest countryFromRest, Map<String, Currency> currencies) {
+        //This can be easily done with mapstruct
         Country country = new Country();
         country.setCountryCode(countryFromRest.getCountryCode());
         country.setCommonName(countryFromRest.getName().getCommon());
         country.setOfficialName(countryFromRest.getName().getOfficial());
 
-        Set<Currency> currenciesSet = new HashSet<>();
-        Set<String> currenciesNames = countryFromRest.getCurrencies().keySet();
-        for(Map.Entry<String, Currency> entry : currencies.entrySet()) {
-            if(currenciesNames.contains(entry.getKey())) {
+        //This needs a bit more work to be done with mapstruct. Search for @Context in mapstruct docs
+        var currenciesSet = new HashSet<Currency>();
+        var currenciesNames = countryFromRest.getCurrencies().keySet();
+        for (Map.Entry<String, Currency> entry : currencies.entrySet()) {
+            if (currenciesNames.contains(entry.getKey())) {
                 currenciesSet.add(entry.getValue());
             }
         }
@@ -45,9 +47,11 @@ public class CountryService {
     }
 
     public void initCountries(List<CountryFromRest> countries, Map<String, Currency> currencies) {
-        for(CountryFromRest countryFromRest : countries) {
-            if(getCountryEntity(countryFromRest.getCountryCode()) == null) {
-                countryRepository.persist(countryDTOToCountry(countryFromRest,currencies));
+        for (CountryFromRest countryFromRest : countries) {
+            var country = countryRepository.getCountry(countryFromRest.getCountryCode());
+            if (country == null) {
+                country = countryDTOToCountry(countryFromRest, currencies);
+                countryRepository.persist(country);
             }
         }
     }
@@ -55,9 +59,4 @@ public class CountryService {
     public List<CountryFromRest> getCountries() {
         return countryClient.getCountryInfo(COUNTRIES_QUERY_PARAMS).stream().toList();
     }
-
-    public Country getCountryEntity(String countryCode) {
-        return countryRepository.getCountry(countryCode);
-    }
-
 }

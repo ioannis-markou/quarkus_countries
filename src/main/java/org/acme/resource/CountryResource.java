@@ -29,7 +29,9 @@ public class CountryResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public CountryDto findByCountryCode(@PathParam("countryCode") String countryCode) {
-        return countryRepository.getCountry(countryCode).toOutput();
+        return countryRepository
+                .getCountry(countryCode)
+                .toOutput();
     }
 
     @GET

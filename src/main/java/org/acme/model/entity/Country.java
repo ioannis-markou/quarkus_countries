@@ -68,6 +68,7 @@ public class Country {
         this.currenciesSet = currencies;
     }
 
+    //This should be a mapstruct mapper
     public CountryDto toOutput() {
         List<String> currencies = new ArrayList<>();
         for(Currency currency : this.getCurrencies()) {
