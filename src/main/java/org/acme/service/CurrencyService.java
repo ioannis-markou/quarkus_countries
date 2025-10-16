@@ -1,25 +1,24 @@
 package org.acme.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.acme.entity.Currency;
-import org.acme.model.dto.CountryDTO;
-import org.acme.model.dto.CurrencyDTO;
+import org.acme.model.entity.Currency;
+import org.acme.model.rest.CountryFromRest;
+import org.acme.model.rest.CurrencyFromRest;
 import org.acme.repository.CurrencyRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 @ApplicationScoped
 public class CurrencyService {
 
     private final CurrencyRepository currencyRepository;
-    private final CountryService countryService;
 
-    public CurrencyService(CurrencyRepository currencyRepository, CountryService countryService) {
+    public CurrencyService(CurrencyRepository currencyRepository) {
         this.currencyRepository = currencyRepository;
-        this.countryService = countryService;
     }
 
-    public Currency currencyDTOToCurrencyEntity(Map.Entry<String, CurrencyDTO> entry) {
+    public Currency currencyDTOToCurrencyEntity(Map.Entry<String, CurrencyFromRest> entry) {
         Currency curr= new Currency();
         curr.setName(entry.getValue().getName());
         curr.setSymbol(entry.getValue().getSymbol());
@@ -28,12 +27,11 @@ public class CurrencyService {
         return curr;
     }
 
-    public Map<String, Currency> initCurrencies() {
-        var countries = countryService.getCountries();
+    public Map<String, Currency> initCurrencies(List<CountryFromRest> countries) {
         Currency curr;
         Map<String, Currency> currencies = new HashMap<>();
-        for(CountryDTO countryDTO : countries) {
-            for(Map.Entry<String, CurrencyDTO> entry: countryDTO.getCurrencies().entrySet()){
+        for(CountryFromRest countryFromRest : countries) {
+            for(Map.Entry<String, CurrencyFromRest> entry: countryFromRest.getCurrencies().entrySet()){
                 curr = currencyDTOToCurrencyEntity(entry);
                 if(getCurrencyEntity(curr.getCurrencyCode()) == null) {
                     currencyRepository.persist(curr);

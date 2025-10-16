@@ -1,4 +1,4 @@
-package org.acme.model.dto;
+package org.acme.model.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

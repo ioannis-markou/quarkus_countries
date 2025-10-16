@@ -1,4 +1,4 @@
-package org.acme.model.dto;
+package org.acme.model.rest;
 
 public class NativeName {
     private String common;

@@ -1,27 +1,27 @@
-package org.acme.model.dto;
+package org.acme.model.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
 
-public class CountryDTO {
+public class CountryFromRest {
     @JsonProperty("name")
     private Name name;
     @JsonProperty("cca2")
     private String countryCode;
-    private Map<String, CurrencyDTO> currencies;
+    private Map<String, CurrencyFromRest> currencies;
 
-    public CountryDTO(Name name, String countryCode, Map<String, CurrencyDTO> currencies) {
+    public CountryFromRest(Name name, String countryCode, Map<String, CurrencyFromRest> currencies) {
         this.name = name;
         this.countryCode = countryCode;
         this.currencies = currencies;
     }
 
-    public Map<String, CurrencyDTO> getCurrencies() {
+    public Map<String, CurrencyFromRest> getCurrencies() {
         return currencies;
     }
 
-    public void setCurrencies(Map<String, CurrencyDTO> currencies) {
+    public void setCurrencies(Map<String, CurrencyFromRest> currencies) {
         this.currencies = currencies;
     }
 
