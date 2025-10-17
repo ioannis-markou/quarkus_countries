@@ -1,10 +1,10 @@
-package org.acme.model.dto;
+package org.acme.model.rest;
 
-public class CurrencyDTO {
+public class CurrencyFromRest {
     private String name;
     private String symbol;
 
-    public CurrencyDTO(String name, String symbol) {
+    public CurrencyFromRest(String name, String symbol) {
         this.name = name;
         this.symbol = symbol;
     }

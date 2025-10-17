@@ -1,14 +1,14 @@
-package org.acme;
+package org.acme.model.dto;
 
 import java.util.List;
 
-public class Output {
+public class CountryDto {
     private String commonName;
     private String countryCode;
     private String officialName;
     private List<String> currenciesCode;
 
-    public Output(String commonName, String countryCode, String officialName, List<String> currenciesCode) {
+    public CountryDto(String commonName, String countryCode, String officialName, List<String> currenciesCode) {
         this.commonName = commonName;
         this.countryCode = countryCode;
         this.officialName = officialName;

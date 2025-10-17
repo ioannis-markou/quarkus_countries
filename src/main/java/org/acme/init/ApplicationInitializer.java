@@ -2,12 +2,13 @@ package org.acme.init;
 
 import io.quarkus.runtime.Startup;
 import jakarta.transaction.Transactional;
-import org.acme.entity.Currency;
+import org.acme.model.entity.Currency;
 import org.acme.service.CountryService;
 import org.acme.service.CurrencyService;
 
 import java.util.Map;
 
+//This is redundant, we can remove it
 @Startup
 public class ApplicationInitializer {
 
@@ -19,10 +20,11 @@ public class ApplicationInitializer {
         this.currencyService = currencyService;
     }
 
-    @Transactional
     @Startup
+    @Transactional
     void populateCountriesTable() {
-        Map<String, Currency> currencies = currencyService.initCurrencies();
-        countryService.initCountries(currencies);
+        var countries = countryService.getCountries();
+        Map<String, Currency> currencies = currencyService.initCurrencies(countries);
+        countryService.initCountries(countries, currencies);
     }
 }

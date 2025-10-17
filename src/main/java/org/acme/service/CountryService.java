@@ -1,10 +1,10 @@
 package org.acme.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.acme.entity.Country;
+import org.acme.model.entity.Country;
 import org.acme.client.CountryClient;
-import org.acme.entity.Currency;
-import org.acme.model.dto.CountryDTO;
+import org.acme.model.entity.Currency;
+import org.acme.model.rest.CountryFromRest;
 import org.acme.repository.CountryRepository;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -25,14 +25,14 @@ public class CountryService {
         this.countryRepository = countryRepository;
     }
 
-    public Country countryDTOToCountry(CountryDTO countryDTO, Map<String, Currency> currencies) {
+    public Country countryDTOToCountry(CountryFromRest countryFromRest, Map<String, Currency> currencies) {
         Country country = new Country();
-        country.setCountryCode(countryDTO.getCountryCode());
-        country.setCommonName(countryDTO.getName().getCommon());
-        country.setOfficialName(countryDTO.getName().getOfficial());
+        country.setCountryCode(countryFromRest.getCountryCode());
+        country.setCommonName(countryFromRest.getName().getCommon());
+        country.setOfficialName(countryFromRest.getName().getOfficial());
 
         Set<Currency> currenciesSet = new HashSet<>();
-        Set<String> currenciesNames = countryDTO.getCurrencies().keySet();
+        Set<String> currenciesNames = countryFromRest.getCurrencies().keySet();
         for(Map.Entry<String, Currency> entry : currencies.entrySet()) {
             if(currenciesNames.contains(entry.getKey())) {
                 currenciesSet.add(entry.getValue());
@@ -44,16 +44,15 @@ public class CountryService {
         return country;
     }
 
-    public void initCountries(Map<String, Currency> currencies) {
-        var countries = getCountries();
-        for(CountryDTO countryDTO : countries) {
-            if(getCountryEntity(countryDTO.getCountryCode()) == null) {
-                countryRepository.persist(countryDTOToCountry(countryDTO,currencies));
+    public void initCountries(List<CountryFromRest> countries, Map<String, Currency> currencies) {
+        for(CountryFromRest countryFromRest : countries) {
+            if(getCountryEntity(countryFromRest.getCountryCode()) == null) {
+                countryRepository.persist(countryDTOToCountry(countryFromRest,currencies));
             }
         }
     }
 
-    public List<CountryDTO> getCountries() {
+    public List<CountryFromRest> getCountries() {
         return countryClient.getCountryInfo(COUNTRIES_QUERY_PARAMS).stream().toList();
     }
 

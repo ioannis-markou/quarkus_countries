@@ -1,7 +1,7 @@
-package org.acme.entity;
+package org.acme.model.entity;
 
 import jakarta.persistence.*;
-import org.acme.Output;
+import org.acme.model.dto.CountryDto;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,11 +68,11 @@ public class Country {
         this.currenciesSet = currencies;
     }
 
-    public Output toOutput() {
+    public CountryDto toOutput() {
         List<String> currencies = new ArrayList<>();
         for(Currency currency : this.getCurrencies()) {
             currencies.add(currency.getCurrencyCode());
         }
-        return new Output(this.getCommonName(), this.getCountryCode(), this.getOfficialName(),currencies);
+        return new CountryDto(this.getCommonName(), this.getCountryCode(), this.getOfficialName(),currencies);
     }
 }
