@@ -1,10 +1,12 @@
 package org.acme.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.acme.mapper.CurrencyMapper;
 import org.acme.model.entity.Currency;
 import org.acme.model.rest.CountryFromRest;
 import org.acme.model.rest.CurrencyFromRest;
 import org.acme.repository.CurrencyRepository;
+import org.mapstruct.factory.Mappers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,18 +15,10 @@ import java.util.Map;
 public class CurrencyService {
 
     private final CurrencyRepository currencyRepository;
+    private final CurrencyMapper currencyMapper = Mappers.getMapper(CurrencyMapper.class);
 
     public CurrencyService(CurrencyRepository currencyRepository) {
         this.currencyRepository = currencyRepository;
-    }
-
-    public Currency currencyDTOToCurrencyEntity(Map.Entry<String, CurrencyFromRest> entry) {
-        Currency curr= new Currency();
-        curr.setName(entry.getValue().getName());
-        curr.setSymbol(entry.getValue().getSymbol());
-        curr.setCurrencyCode(entry.getKey());
-
-        return curr;
     }
 
     public Map<String, Currency> initCurrencies(List<CountryFromRest> countries) {
@@ -32,7 +26,7 @@ public class CurrencyService {
         Map<String, Currency> currencies = new HashMap<>();
         for(CountryFromRest countryFromRest : countries) {
             for(Map.Entry<String, CurrencyFromRest> entry: countryFromRest.getCurrencies().entrySet()){
-                curr = currencyDTOToCurrencyEntity(entry);
+                curr = currencyMapper.restCurrencyToCurrency(entry);
                 if(getCurrencyEntity(curr.getCurrencyCode()) == null) {
                     currencyRepository.persist(curr);
                     currencies.put(entry.getKey(), curr);
