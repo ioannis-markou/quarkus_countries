@@ -8,8 +8,6 @@ import org.acme.service.CurrencyService;
 
 import java.util.Map;
 
-//This is redundant, we can remove it
-@Startup
 public class ApplicationInitializer {
 
     private final CountryService countryService;
@@ -22,7 +20,7 @@ public class ApplicationInitializer {
 
     @Startup
     @Transactional
-    void populateCountriesTable() {
+    void populateTables() {
         var countries = countryService.getCountries();
         Map<String, Currency> currencies = currencyService.initCurrencies(countries);
         countryService.initCountries(countries, currencies);
