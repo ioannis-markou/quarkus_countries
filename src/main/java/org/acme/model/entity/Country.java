@@ -3,7 +3,6 @@ package org.acme.model.entity;
 import jakarta.persistence.*;
 import org.acme.model.dto.CountryDto;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,11 +67,12 @@ public class Country {
         this.currenciesSet = currencies;
     }
 
-    public CountryDto toOutput() {
-        List<String> currencies = new ArrayList<>();
-        for(Currency currency : this.getCurrencies()) {
-            currencies.add(currency.getCurrencyCode());
-        }
-        return new CountryDto(this.getCommonName(), this.getCountryCode(), this.getOfficialName(),currencies);
+    public CountryDto toCountryDto() {
+        List<String> currencies = this.getCurrencies()
+                .stream()
+                .map(Currency::getCurrencyCode)
+                .toList();
+
+        return new CountryDto(this.getCommonName(), this.getCountryCode(), this.getOfficialName(), currencies);
     }
 }

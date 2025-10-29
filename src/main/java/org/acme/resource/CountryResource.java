@@ -29,7 +29,7 @@ public class CountryResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public CountryDto findByCountryCode(@PathParam("countryCode") String countryCode) {
-        return countryRepository.getCountry(countryCode).toOutput();
+        return countryRepository.getCountry(countryCode).toCountryDto();
     }
 
     @GET
@@ -37,6 +37,6 @@ public class CountryResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public List<CountryDto> findByCurrencyCode(@PathParam("currencyCode") String currencyCode) {
-        return currencyRepository.getCurrency(currencyCode).toOutputList();
+        return currencyRepository.getCurrency(currencyCode).toCountryDtoList();
     }
 }
