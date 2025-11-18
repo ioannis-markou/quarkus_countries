@@ -8,13 +8,10 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.acme.model.dto.CountryDto;
-import org.acme.model.rest.CountryFromRest;
 import org.acme.repository.CountryRepository;
 import org.acme.repository.CurrencyRepository;
 import org.acme.client.SoapCountryClient;
-import org.acme.model.dto.CountryDto;
-import org.acme.soapclient.TCountryCodeAndName;
-import org.acme.soapclient.TCountryInfo;
+
 
 import java.util.List;
 

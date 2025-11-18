@@ -13,7 +13,6 @@ import org.acme.repository.CountryRepository;
 import org.acme.soapclient.ArrayOftCountryCodeAndName;
 import org.acme.soapclient.TCountryCodeAndName;
 import org.acme.soapclient.TCountryInfo;
-import org.acme.soapclient.TCurrency;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.mapstruct.factory.Mappers;
 

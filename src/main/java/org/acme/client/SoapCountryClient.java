@@ -3,10 +3,8 @@ package org.acme.client;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.acme.model.dto.CountryDto;
-import org.acme.service.CountryService;
 import org.acme.soapclient.CountryInfoService;
 import org.acme.soapclient.CountryInfoServiceSoapType;
-import org.acme.soapclient.TCountryInfo;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.xml.namespace.QName;
