@@ -8,8 +8,13 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.acme.model.dto.CountryDto;
+import org.acme.model.rest.CountryFromRest;
 import org.acme.repository.CountryRepository;
 import org.acme.repository.CurrencyRepository;
+import org.acme.client.SoapCountryClient;
+import org.acme.model.dto.CountryDto;
+import org.acme.soapclient.TCountryCodeAndName;
+import org.acme.soapclient.TCountryInfo;
 
 import java.util.List;
 
@@ -18,10 +23,12 @@ import java.util.List;
 public class CountryResource {
     private final CountryRepository countryRepository;
     private final CurrencyRepository currencyRepository;
+    private final SoapCountryClient soapCountryClient;
 
-    CountryResource(CountryRepository countryRepository, CurrencyRepository currencyRepository) {
+    CountryResource(CountryRepository countryRepository, CurrencyRepository currencyRepository, SoapCountryClient soapCountryClient) {
         this.countryRepository = countryRepository;
         this.currencyRepository = currencyRepository;
+        this.soapCountryClient = soapCountryClient;
     }
 
     @GET
@@ -38,5 +45,13 @@ public class CountryResource {
     @Transactional
     public List<CountryDto> findByCurrencyCode(@PathParam("currencyCode") String currencyCode) {
         return currencyRepository.getCurrency(currencyCode).toCountryDtoList();
+    }
+
+    @GET
+    @Path("/soap/{countryCode}")
+    @Produces(MediaType.APPLICATION_JSON) // or MediaType.APPLICATION_XML
+    public CountryDto findByCountryCodeSoap(@PathParam("countryCode") String countryCode) {
+        // Directly call SOAP client and return the SOAP-generated object
+        return soapCountryClient.getCountry(countryCode);
     }
 }

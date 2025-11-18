@@ -4,6 +4,7 @@ import org.acme.model.entity.Country;
 import org.acme.model.entity.Currency;
 import org.acme.model.rest.CountryFromRest;
 import org.acme.service.CountryService;
+import org.acme.soapclient.TCountryInfo;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,4 +20,9 @@ public interface CountryMapper {
     @Mapping(target = "countryCode", source = "countryFromRest.countryCode")
     @Mapping(target = "id", ignore = true)
     Country restCountryToCountry(CountryFromRest countryFromRest, Map<String, Currency> currencies, @Context CountryService context);
+
+    @Mapping(target = "name", expression = "java(context.mapName(soapCountry))")
+    @Mapping(target = "countryCode", source = "SISOCode")
+    @Mapping(target = "currencies", expression = "java(context.mapCurrencies(soapCountry))")
+    CountryFromRest soapCountrytoCountryFromRest(TCountryInfo soapCountry, @Context CountryService context);
 }

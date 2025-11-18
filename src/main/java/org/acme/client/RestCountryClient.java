@@ -11,7 +11,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import java.util.Set;
 
 @RegisterRestClient(configKey = "countries")
-public interface CountryClient {
+public interface RestCountryClient {
 
     @GET
     @Path("/all")
