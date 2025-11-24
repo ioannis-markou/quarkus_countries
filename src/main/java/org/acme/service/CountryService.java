@@ -3,12 +3,15 @@ package org.acme.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.acme.client.SoapCountryClient;
 import org.acme.mapper.CountryMapper;
+import org.acme.model.dto.CountrySoapDto;
 import org.acme.model.entity.Country;
 import org.acme.client.RestCountryClient;
 import org.acme.model.entity.Currency;
 import org.acme.model.rest.CountryFromRest;
 import org.acme.model.rest.CurrencyFromRest;
 import org.acme.model.rest.Name;
+import org.acme.model.soap.CountriesResponse;
+import org.acme.model.soap.CountryResponse;
 import org.acme.repository.CountryRepository;
 import org.acme.soapclient.ArrayOftCountryCodeAndName;
 import org.acme.soapclient.TCountryCodeAndName;
@@ -53,7 +56,6 @@ public class CountryService {
 
     public Country getCountryEntity(String countryCode) { return countryRepository.getCountry(countryCode); }
 
-
     //Fetch ALL countries from SOAP and convert into List<CountryFromRest>.
     public List<CountryFromRest> getCountriesFromSoap() {
 
@@ -94,5 +96,16 @@ public class CountryService {
             currencies.put(iso, new CurrencyFromRest("", ""));
         }
         return currencies;
+    }
+
+    public CountryResponse entityToCountryResponse(Country country) {
+        return new CountryResponse(countryMapper.entityToSoap(country));
+    }
+
+    public CountriesResponse entityListToCountriesResponse(List<Country> countries) {
+        List<CountrySoapDto> dtos = countries.stream()
+                .map(countryMapper::entityToSoap)
+                .toList();
+        return new CountriesResponse(dtos);
     }
     }

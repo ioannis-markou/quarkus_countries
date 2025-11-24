@@ -1,5 +1,6 @@
 package org.acme.mapper;
 
+import org.acme.model.dto.CountrySoapDto;
 import org.acme.model.entity.Country;
 import org.acme.model.entity.Currency;
 import org.acme.model.rest.CountryFromRest;
@@ -11,7 +12,7 @@ import org.mapstruct.Mapping;
 
 import java.util.Map;
 
-@Mapper
+@Mapper(componentModel = "cdi")
 public interface CountryMapper {
 
     @Mapping(target = "officialName", expression = "java(countryFromRest.getName().getOfficial())")
@@ -25,4 +26,8 @@ public interface CountryMapper {
     @Mapping(target = "countryCode", source = "SISOCode")
     @Mapping(target = "currencies", expression = "java(context.mapCurrencies(soapCountry))")
     CountryFromRest soapCountrytoCountryFromRest(TCountryInfo soapCountry, @Context CountryService context);
+
+    @Mapping(target = "code", source = "countryCode")
+    @Mapping(target = "currencies", expression = "java(country.getCurrencies().stream().map(Currency::getCurrencyCode).toList())")
+    CountrySoapDto entityToSoap(Country country);
 }
