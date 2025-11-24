@@ -4,8 +4,6 @@ import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
-import jakarta.inject.Inject;
-import org.acme.model.dto.CountrySoapDto;
 import org.acme.model.entity.Country;
 import org.acme.repository.CurrencyRepository;
 import org.acme.service.CountryService;
