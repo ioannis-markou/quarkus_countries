@@ -9,10 +9,22 @@ import org.acme.soapclient.TCountryInfo;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
+import java.util.Collections;
 import java.util.Map;
 
-@Mapper(componentModel = "cdi")
+import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
+import static org.mapstruct.MappingConstants.ComponentModel.JAKARTA_CDI;
+
+@Mapper(
+        componentModel = JAKARTA_CDI,
+        injectionStrategy = CONSTRUCTOR,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        unmappedSourcePolicy = ReportingPolicy.IGNORE,
+        uses = { TCountryInfoMapper.class },
+        imports = {Collections.class}
+)
 public interface CountryMapper {
 
     @Mapping(target = "officialName", expression = "java(countryFromRest.getName().getOfficial())")
@@ -22,7 +34,7 @@ public interface CountryMapper {
     @Mapping(target = "id", ignore = true)
     Country restCountryToCountry(CountryFromRest countryFromRest, Map<String, Currency> currencies, @Context CountryService context);
 
-    @Mapping(target = "name", expression = "java(context.mapName(soapCountry))")
+    @Mapping(target = "name", source = "soapCountry")
     @Mapping(target = "countryCode", source = "SISOCode")
     @Mapping(target = "currencies", expression = "java(context.mapCurrencies(soapCountry))")
     CountryFromRest soapCountrytoCountryFromRest(TCountryInfo soapCountry, @Context CountryService context);

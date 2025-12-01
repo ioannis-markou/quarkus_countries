@@ -1,15 +1,14 @@
 package org.acme.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.acme.client.RestCountryClient;
 import org.acme.client.SoapCountryClient;
 import org.acme.mapper.CountryMapper;
 import org.acme.model.dto.CountrySoapDto;
 import org.acme.model.entity.Country;
-import org.acme.client.RestCountryClient;
 import org.acme.model.entity.Currency;
 import org.acme.model.rest.CountryFromRest;
 import org.acme.model.rest.CurrencyFromRest;
-import org.acme.model.rest.Name;
 import org.acme.model.soap.CountriesResponse;
 import org.acme.model.soap.CountryResponse;
 import org.acme.repository.CountryRepository;
@@ -60,7 +59,7 @@ public class CountryService {
     public List<CountryFromRest> getCountriesFromSoap() {
 
         List<CountryFromRest> result = new ArrayList<>();
-        // Step 1: Get all country codes & names
+        // Step 1: Get all country codes and names
         ArrayOftCountryCodeAndName array = soapCountryClient.getPort().listOfCountryNamesByCode();
         if (array == null || array.getTCountryCodeAndName() == null) {
             return result;
@@ -82,10 +81,6 @@ public class CountryService {
             }
         }
         return result;
-    }
-    //Context methods for mapping SOAP countries -> REST countries.
-    public Name mapName(TCountryInfo soapCountry) {
-        return new Name(soapCountry.getSName(), soapCountry.getSName(), Collections.emptyMap());
     }
 
     public Map<String, CurrencyFromRest> mapCurrencies(TCountryInfo soapCountry) {
