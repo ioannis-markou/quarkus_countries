@@ -25,5 +25,4 @@ public interface CurrencyMapper {
     @Mapping(target = "currencyCode", expression = "java(entry.getKey())")
     @Mapping(target = "countries", ignore = true)
     Currency restCurrencyToCurrency(Map.Entry<String, CurrencyFromRest> entry);
-
 }
