@@ -10,19 +10,17 @@ import jakarta.ws.rs.core.MediaType;
 import org.acme.model.dto.CountryDto;
 import org.acme.repository.CountryRepository;
 import org.acme.repository.CurrencyRepository;
-import org.acme.client.SoapCountryClient;
-
+import org.acme.soapclient.CountryInfoServiceSoapType;
 
 import java.util.List;
-
 
 @Path("/countries")
 public class CountryResource {
     private final CountryRepository countryRepository;
     private final CurrencyRepository currencyRepository;
-    private final SoapCountryClient soapCountryClient;
+    private final CountryInfoServiceSoapType soapCountryClient;
 
-    CountryResource(CountryRepository countryRepository, CurrencyRepository currencyRepository, SoapCountryClient soapCountryClient) {
+    CountryResource(CountryRepository countryRepository, CurrencyRepository currencyRepository, CountryInfoServiceSoapType soapCountryClient) {
         this.countryRepository = countryRepository;
         this.currencyRepository = currencyRepository;
         this.soapCountryClient = soapCountryClient;
@@ -49,6 +47,7 @@ public class CountryResource {
     @Produces(MediaType.APPLICATION_JSON) // or MediaType.APPLICATION_XML
     public CountryDto findByCountryCodeSoap(@PathParam("countryCode") String countryCode) {
         // Directly call SOAP client and return the SOAP-generated object
-        return soapCountryClient.getCountry(countryCode);
+        //TODO move the below to country service. Service should return the CountryDTO mapped from TCountryInfo.
+        return soapCountryClient.fullCountryInfo(countryCode);
     }
 }

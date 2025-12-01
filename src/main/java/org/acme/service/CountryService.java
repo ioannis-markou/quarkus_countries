@@ -1,8 +1,8 @@
 package org.acme.service;
 
+import io.quarkiverse.cxf.annotation.CXFClient;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.acme.client.RestCountryClient;
-import org.acme.client.SoapCountryClient;
 import org.acme.mapper.CountryMapper;
 import org.acme.model.dto.CountrySoapDto;
 import org.acme.model.entity.Country;
@@ -13,6 +13,7 @@ import org.acme.model.soap.CountriesResponse;
 import org.acme.model.soap.CountryResponse;
 import org.acme.repository.CountryRepository;
 import org.acme.soapclient.ArrayOftCountryCodeAndName;
+import org.acme.soapclient.CountryInfoServiceSoapType;
 import org.acme.soapclient.TCountryCodeAndName;
 import org.acme.soapclient.TCountryInfo;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -26,12 +27,12 @@ public class CountryService {
 
     private static final String COUNTRIES_QUERY_PARAMS = "name,currencies,cca2";
     private final CountryRepository countryRepository;
-    private final SoapCountryClient soapCountryClient;
+    private final CountryInfoServiceSoapType soapCountryClient;
     private final CountryMapper countryMapper = Mappers.getMapper(CountryMapper.class);
     @RestClient
     RestCountryClient restCountryClient;
 
-    CountryService(CountryRepository countryRepository, SoapCountryClient soapCountryClient) {
+    CountryService(CountryRepository countryRepository, @CXFClient("oorsprong") CountryInfoServiceSoapType soapCountryClient) {
         this.countryRepository = countryRepository;
         this.soapCountryClient = soapCountryClient;
     }
@@ -60,10 +61,11 @@ public class CountryService {
 
         List<CountryFromRest> result = new ArrayList<>();
         // Step 1: Get all country codes and names
-        ArrayOftCountryCodeAndName array = soapCountryClient.getPort().listOfCountryNamesByCode();
+        ArrayOftCountryCodeAndName array = soapCountryClient.listOfCountryNamesByCode();
         if (array == null || array.getTCountryCodeAndName() == null) {
             return result;
         }
+
         for (TCountryCodeAndName entry : array.getTCountryCodeAndName()) {
             try {
                 // ISO code
@@ -71,7 +73,7 @@ public class CountryService {
                 if (iso == null || iso.isBlank())
                     continue;
                 // Step 2: Get full country info
-                TCountryInfo info = soapCountryClient.getPort().fullCountryInfo(iso);
+                TCountryInfo info = soapCountryClient.fullCountryInfo(iso);
                 if (info != null) {
                     // Step 3: Convert to CountryFromRest
                     result.add(countryMapper.soapCountrytoCountryFromRest(info,this));

@@ -1,5 +1,7 @@
 package org.acme.model.dto;
 
+import org.acme.soapclient.TCountryInfo;
+
 import java.util.List;
 
 public class CountryDto {
@@ -13,6 +15,10 @@ public class CountryDto {
         this.countryCode = countryCode;
         this.officialName = officialName;
         this.currenciesCode = currenciesCode;
+    }
+
+    public CountryDto(TCountryInfo soapCountry) {
+        //TODO implement this and use it to replace the multiple parameter constructor
     }
 
     public String getCommonName() {
